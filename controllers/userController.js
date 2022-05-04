@@ -2,12 +2,24 @@ const fs = require('fs');
 
 let users = JSON.parse(fs.readFileSync(`${__dirname}/../data/users.json`));
 
+const lower = (user) => {
+  const usercopy = JSON.parse(JSON.stringify(user));
+  if (usercopy.first_name) {
+    usercopy.first_name = usercopy.first_name.toLowerCase();
+  }
+  if (usercopy.last_name) {
+    usercopy.last_name = usercopy.last_name.toLowerCase();
+  }
+  return usercopy;
+};
+
 exports.getAllUsers = (req, res) => {
+  const newUsers = users.map((user) => lower(user));
   res.status(200).json({
     status: 'success',
     requestTime: req.requestTime,
     results: users.length,
-    data: { users },
+    data: { users: newUsers },
   });
 };
 
