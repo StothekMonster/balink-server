@@ -57,6 +57,7 @@ exports.deleteUser = (req, res) => {
 };
 
 exports.createUser = (req, res) => {
+  console.log(req.body);
   const newId = users[users.length - 1].id + 1;
   // eslint-disable-next-line node/no-unsupported-features/es-syntax
   const newUser = { id: newId, ...req.body[0] };
