@@ -33,15 +33,15 @@ exports.getUser = (req, res) => {
 exports.updateUser = (req, res) => {
   const id = +req.params.id;
   const user = users.find((userObj) => userObj.id === id);
-
-  user.first_name = req.body.first_name;
-  user.last_name = req.body.last_name;
-  user.age = +req.body.age;
-  user.phone = +req.body.phone;
+  user.first_name = req.body[0].first_name;
+  user.last_name = req.body[0].last_name;
+  user.age = +req.body[0].age;
+  user.phone = +req.body[0].phone;
 
   fs.writeFile(`${__dirname}/../data/users.json`, JSON.stringify(users), () => {
     res.status(201).json({
       status: 'success',
+      data: { user },
     });
   });
 };
@@ -49,16 +49,17 @@ exports.updateUser = (req, res) => {
 exports.deleteUser = (req, res) => {
   const id = +req.params.id;
   users = users.filter((userObj) => userObj.id !== id);
+
   fs.writeFile(`${__dirname}/../data/users.json`, JSON.stringify(users), () => {
     res.status(201).json({
       status: 'success',
+      data: users,
     });
   });
 };
 
 exports.createUser = (req, res) => {
-  console.log(req.body);
-  const newId = users[users.length - 1].id + 1;
+  const newId = users.length === 0 ? 0 : users[users.length - 1].id + 1;
   // eslint-disable-next-line node/no-unsupported-features/es-syntax
   const newUser = { id: newId, ...req.body[0] };
   users.push(newUser);
